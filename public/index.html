@@ -37,15 +37,21 @@
 <body ng-app = "intelComputeVisionApp"> 
       <div id = "layoutContainer" ng-cloak  layout = "column"  ng-controller="mainController" >
     
-        <div flex ="20" id = "row1" layout = "row"   class = "row" layout-align = "center center"  >
-            <div flex = "50"  layout = "row" id="output"  layout-padding layout-align = "center center" ng-controller="outputController" class = "round panel column">
-              <div flex="10" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
-              <div flex="auto" id="predictionName" style="height:100%"> {{prediction.name}} </div>
+        <div flex ="20" id = "row1" layout = "column"   layout-align="center center" ng-controller="outputController"  >
+            <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="upButton"  ng-click="nextPrediction()">
+              <md-icon md-svg-icon="css/images/up.svg"></md-icon>
+            </md-button>
+            <div flex = "50"  layout = "row" id="output"  style="width:35%" layout-align = "center center" class = "round box">
+              <div flex="0" ng-if="predictions.length > 0" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
+              <div flex="auto" ng-if="predictions.length > 0" id="predictionName" style="height:100%"> {{prediction.name}} </div>
             </div>
+            <md-button ng-if="predictions.length >= 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
+              <md-icon md-svg-icon="css/images/down.svg"></md-icon>
+            </md-button>
         </div>
 
         <div flex="80"  id = "row2" layout = "row"   class = "row"   layout-align="space-around start">
-            <div flex="15" layout = "column" class = "column leftContol round panel" >
+            <div flex="15" layout = "column" class = "column leftContol round box" >
                
                <div flex id = "AI Chip" class = "settings" ng-controller="settingsController" >
                 <div class = "settingsTitle"> AI Chip </div>
@@ -88,7 +94,7 @@
               </div>
 
 
-              <div flex="10"  layout = "column" style="margin-top: 40px;" layout-padding layout-align = "center center" class = "round panel" ng-controller="settingsController">
+              <div flex="10"  layout = "column" style="margin-top: 40px;" layout-padding layout-align = "center center" class = "round box" ng-controller="settingsController">
                   <div class = "settingsTitle">
                     <label for="autoScroll">Auto Scroll: </label>
                     <input id="autoScroll" type="checkbox" ng-model="settings.autoScrollEnabled" />
@@ -96,7 +102,7 @@
               </div>
            </div>
 
-            <div flex="15"  layout = "column"  class = "rightContol round panel"  >
+            <div flex="15"  layout = "column"  class = "rightContol round box"  >
                
                <div flex id = "source" class = "settings" ng-controller="settingsController" >
                 <div class = "settingsTitle"> Source </div>

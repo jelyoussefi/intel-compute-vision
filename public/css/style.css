@@ -19,7 +19,7 @@ body {
 	opacity: 1;
 }
 
-.panel 
+.box 
 {
 	padding: 20px;
 }
@@ -72,16 +72,15 @@ body {
 }
 
 #output {
-	height: 100px;
  	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;
-	color: #ff53b0;
+	color: #44ccb0;
 }
 
 #predictionPercentage {
 	display: flex;
  	align-items: center;
- 	justify-content: center;
-  	text-align: center;
+ 	justify-content: left;
+  	text-align: left;
 	font: 20px 'Open Sans', sans-serif;
 	font-weight: bold;
 }
@@ -93,4 +92,14 @@ body {
   	text-align: center;
 	font: 40px 'Open Sans', sans-serif;
 	font-weight: bold;
+}
+
+#upButton {
+	margin-bottom: -10px;
+	opacity: 0.2;
+}
+
+#downButton {
+	margin-top: -8px;
+	opacity: 0.2;
 }
