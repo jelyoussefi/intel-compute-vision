@@ -1,0 +1,48 @@
+<div>
+    <div ng-show="settings.inputType == 'Image'">
+        <ui-carousel 
+
+            slides="slides"
+            slides-to-show="1"
+            slides-to-scroll="1"
+            initial-slide="0"
+            autoplay="settings.autoScrollEnabled"
+            autoplay-speed="settings.autoplaySpeed"
+            on-init="onCarouselInit()"
+            on-after-change="onAfterChange(currentSlide)"
+            fade="true"
+            dots="true" >
+
+            <carousel-item  >
+
+                <img  ng-src="{{ item.path }}"  >
+
+            </carousel-item>
+
+
+        </ui-carousel>
+    </div>
+
+    <div ng-show="settings.inputType == 'Video'">
+        <ui-carousel 
+
+            slides="slides"
+            slides-to-show="1"
+            slides-to-scroll="1"
+            initial-slide="0"
+            autoplay="settings.autoScrollEnabled"
+            autoplay-speed="settings.autoplaySpeed"
+            on-init="onCarouselInit()"
+            on-after-change="onAfterChange(currentSlide)"
+            fade="true"
+            dots="true" >
+
+            <carousel-item  >
+
+                <video  ng-src="{{ item.path }}" controls  allowfullscreen="false" >
+
+            </carousel-item>
+
+        </ui-carousel>
+    </div>
+</div>

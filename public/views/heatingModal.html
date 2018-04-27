@@ -1,0 +1,14 @@
+<div class="modal-header">
+	<h3 class="modal-title">Heating - {{state}}</h3> 
+</div>
+<div class="modal-body">
+	<button style="float: right" ng-show="state=='ON'" class="btn btn-danger" ng-click="turnOff()">Turn OFF</button>
+	<button style="float: left"  ng-show="state=='OFF'" class="btn btn-success" ng-click="turnOn()">Turn ON</button>
+	<br>
+	<br>
+	<input ng-disabled="state=='OFF'" type="number" min=20 max=50 ng-model="temperature" uib-tooltip="Set temperature in degrees Celsius"
+		tooltip-trigger="focus" tooltip-placement="bottom" class="form-control" />
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-click="ok()">OK</button>
+</div>

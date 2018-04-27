@@ -1,0 +1,49 @@
+{
+  "_from": "angular-snap",
+  "_id": "angular-snap@1.8.5",
+  "_inBundle": false,
+  "_integrity": "sha1-7NaUiy58Ywj9PHznViHadtvlWDM=",
+  "_location": "/angular-snap",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "angular-snap",
+    "name": "angular-snap",
+    "escapedName": "angular-snap",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-snap/-/angular-snap-1.8.5.tgz",
+  "_shasum": "ecd6948b2e7c6308fd3c7ce75621da76dbe55833",
+  "_spec": "angular-snap",
+  "_where": "/opt/angularjs/icv",
+  "author": {
+    "name": "jtrussell"
+  },
+  "bugs": {
+    "url": "https://github.com/jtrussell/angular-snap.js/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "angular": "1.4.x || 1.2.x"
+  },
+  "deprecated": false,
+  "description": "This repo holds built files for the [angular-snap.js](https://github.com/jtrussell/angular-snap.js) component.",
+  "license": "MIT",
+  "main": "angular-snap.js",
+  "name": "angular-snap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jtrussell/angular-snap.js/issues"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "version": "1.8.5"
+}

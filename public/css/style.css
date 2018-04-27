@@ -1,0 +1,96 @@
+
+body {
+	position: absolute;
+
+//	background: url(images/intel-cv.png) no-repeat center fixed; 
+	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
+	background-size: cover; /* version standardisée */
+}
+
+#layoutContainer 
+{
+		position: absolute;
+
+	width: 100vw;
+	height: 100vh;
+
+	padding: 40px;
+	
+	opacity: 1;
+}
+
+.panel 
+{
+	padding: 20px;
+}
+
+
+.round 
+{
+	border: 1px solid #4553b0;
+	border-radius: 12px;
+	box-shadow: -1px -1px 1px #d4d4d4, 5px 5px 5px #999;
+}
+
+.nround 
+{
+	border: 2px solid #4553b0;
+	box-shadow: -2px -2px 2px #d4d4d4, 6px 6px 6px #999;
+}
+
+
+.settingsTitle
+{
+	padding-left: 15px;
+	padding-bottom: 15px;
+	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;
+	color: #4553b0;
+	font: 20px 'Open Sans', sans-serif;
+	opacity: 0.75;
+	font-weight: bold;
+}
+
+.settings
+{
+	margin: 0;
+	padding: 0;
+	margin-bottom: 20px; 
+}
+
+.settingsItem 
+{
+	margin: 0;
+	padding: 0;
+	padding-left: 50px;
+	font: 12px 'Open Sans', sans-serif;
+	font-weight: bold;
+}
+
+#input {
+	width: 904px;
+	height: 510px;
+}
+
+#output {
+	height: 100px;
+ 	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;
+	color: #ff53b0;
+}
+
+#predictionPercentage {
+	display: flex;
+ 	align-items: center;
+ 	justify-content: center;
+  	text-align: center;
+	font: 20px 'Open Sans', sans-serif;
+	font-weight: bold;
+}
+
+#predictionName {
+	display: flex;
+ 	align-items: center;
+ 	justify-content: center;
+  	text-align: center;
+	font: 40px 'Open Sans', sans-serif;
+	font-weight: bold;
+}

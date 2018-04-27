@@ -1,0 +1,74 @@
+{
+  "_from": "angular-recaptcha",
+  "_id": "angular-recaptcha@4.1.3",
+  "_inBundle": false,
+  "_integrity": "sha512-p5RJXSNYzKSXP9ZfZ4gMpqzl8sXLDyWGE768Xb4bXSy2PcKB1Nw5eM72vc0T9ejswebGqFkYDiJsgryiKxB+bQ==",
+  "_location": "/angular-recaptcha",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "angular-recaptcha",
+    "name": "angular-recaptcha",
+    "escapedName": "angular-recaptcha",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-recaptcha/-/angular-recaptcha-4.1.3.tgz",
+  "_shasum": "f182aed1de8b5bd18192bdb4713a4d44bbf8c11f",
+  "_spec": "angular-recaptcha",
+  "_where": "/opt/angularjs/icv",
+  "author": {
+    "name": "VividCortex"
+  },
+  "bugs": {
+    "url": "https://github.com/vividcortex/angular-recaptcha/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Eduardo Daniel Cuomo",
+      "email": "reduardo7@gmail.com",
+      "url": "https://github.com/reduardo7/angular-recaptcha"
+    }
+  ],
+  "deprecated": false,
+  "description": "An AngularJS module to ease usage of reCaptcha inside a form",
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-karma": "^2.0.0",
+    "grunt-karma-coveralls": "^2.5.4",
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-safari-launcher": "^1.0.0"
+  },
+  "homepage": "https://github.com/vividcortex/angular-recaptcha",
+  "license": "MIT",
+  "main": "index.js",
+  "name": "angular-recaptcha",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vividcortex/angular-recaptcha.git"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "version": "4.1.3"
+}
