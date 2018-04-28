@@ -10,7 +10,8 @@ var intelComputeVisionApp = angular.module('intelComputeVisionApp', [
                                                                       'ui.carousel',
                                                                       'ngSanitize',
                                                                       'vcRecaptcha',
-                                                                      'btford.socket-io'
+                                                                      'btford.socket-io',
+                                                                      'chart.js'
                                                                       ])
 
 

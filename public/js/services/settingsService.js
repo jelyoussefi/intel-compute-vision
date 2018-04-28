@@ -22,6 +22,7 @@ icvServices.factory('settings', function() {
 	              inputType: '',
 	              chip: '',
 	              cnn: '',
+	              benchmark: '',
 	              action: '',
 	              file: '',
 	              autoScrollEnabled: '',

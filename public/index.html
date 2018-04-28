@@ -15,6 +15,8 @@
   <script src="lib/angular-ui-carousel/ui-carousel.js"></script>
   <script src="lib/angular-socket-io/socket.js"></script>
   <script src="lib/angular-recaptcha/release/angular-recaptcha.js"></script>
+  <script src="lib/chart.js/dist/Chart.min.js"></script>
+  <script src="lib/angular-chart.js/dist/angular-chart.min.js"></script>
   <script src="js/ui-bootstrap-tpls-0.14.3.js"></script>
   
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -30,6 +32,7 @@
   <script src="js/controllers/mainController.js "></script>
   <script src="js/controllers/settingsController.js "></script>
   <script src="js/controllers/outputController.js"></script>
+  <script src="js/controllers/benchmarkController.js"></script>
   <script src="js/services/settingsService.js"></script>
   <script src="js/directives/mediaCarousel.js"></script>
 
@@ -37,53 +40,75 @@
 <body ng-app = "intelComputeVisionApp"> 
       <div id = "layoutContainer" ng-cloak  layout = "column"  ng-controller="mainController" >
     
-        <div flex ="20" id = "row1" layout = "column"   layout-align="center center" ng-controller="outputController"  >
-            <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="upButton"  ng-click="nextPrediction()">
-              <md-icon md-svg-icon="css/images/up.svg"></md-icon>
-            </md-button>
-            <div flex = "50"  layout = "row" id="output"  style="width:35%" layout-align = "center center" class = "round box">
-              <div flex="10" ng-if="predictions.length > 0" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
-              <div flex="auto" ng-if="predictions.length > 0" id="predictionName" style="height:100%"> {{prediction.name}} </div>
-              <div flex="10" ng-if="predictions.length > 0" id="execTime" style="height:100%"> {{execTime}} </div>
+        <div flex ="30" id = "row1"  layout = "column"  layout-align="center center" >
+            <div flex="100" ng-if="settings.benchmark=='None'" layout = "column"  style="width:100%"  layout-align="center center"  ng-controller="outputController" >
+              <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="upButton"  ng-click="nextPrediction()">
+                <md-icon md-svg-icon="css/images/up.svg"></md-icon>
+              </md-button>
+              <div flex = "50"  layout = "row" id="output"  style="width:35%" layout-align = "center center" class = "round box"  >
+                <div flex="10" ng-if="predictions.length > 0" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
+                <div flex="80" ng-if="predictions.length > 0" id="predictionName" style="height:100%"> {{prediction.name}} </div>
+                <div flex="10" ng-if="predictions.length > 0" id="execTime" style="height:100%"> {{execTime}} </div>
+              </div>
+              <md-button ng-if="predictions.length >= 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
+                <md-icon md-svg-icon="css/images/down.svg"></md-icon>
+              </md-button>
             </div>
-            <md-button ng-if="predictions.length >= 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
-              <md-icon md-svg-icon="css/images/down.svg"></md-icon>
-            </md-button>
+
+            <div flex="80" ng-if="settings.benchmark!='None'" style="width:35%" layout = "column"   layout-align="center center" class = "round box" ng-controller="benchmarkController">
+              <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" height="100">
+              </canvas>
+            </div>
+
         </div>
 
-        <div flex="80"  id = "row2" layout = "row"   class = "row"   layout-align="space-around start">
+        <div flex="70"  id = "row2" layout = "row"   class = "row"   layout-align="space-around start">
             <div flex="15" layout = "column" class = "column leftContol round box" >
                
-               <div flex id = "AI Chip" class = "settings" ng-controller="settingsController" >
+              <div flex id = "AI Chip" class = "settings" ng-controller="settingsController" >
                 <div class = "settingsTitle"> AI Chip </div>
                 <md-radio-group ng-model="settings.chip">
                   
-                  <div ng-repeat='chip in chips' class="rowx">
+                  <div ng-repeat='chip in chips' >
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-disabled="!chip.enabled" ng-value="chip.name" class="md-primary">
+                      <md-radio-button ng-disabled="!chip.enabled || settings.benchmarkInProgress" ng-value="chip.name" class="md-primary">
                          {{chip.name}}
                       </md-radio-button>
                     </div>
                   </div>
                 </md-radio-group>
-               </div>
-
-                <div flex id = "CNN" class = "settings" ng-controller="settingsController" >
+              </div>
+              
+              <div flex id = "CNN" class = "settings" ng-controller="settingsController" >
                 <div class = "settingsTitle">CNN</div>
                 <md-radio-group ng-model="settings.cnn">
                   
                   <div ng-repeat='cnn in cnns' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-disabled="!cnn.enabled"  ng-value="cnn.name" class="md-primary">
+                      <md-radio-button ng-disabled="!cnn.enabled || settings.benchmarkInProgress"  ng-value="cnn.name" class="md-primary">
                          {{cnn.name}}
                       </md-radio-button>
                     </div>
                   </div>
                 </md-radio-group>
-            </div>
+              </div>
 
+              <div flex id = "Benchmark" class = "settings" ng-controller="settingsController" >
+                <div class = "settingsTitle">Benchmark</div>
+                <md-radio-group ng-model="settings.benchmark">
+                  
+                  <div ng-repeat='benchmark in benchmarks' >
+
+                    <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
+                      <md-radio-button ng-disabled="!benchmark.enabled"  ng-value="benchmark.name" class="md-primary">
+                         {{benchmark.name}}
+                      </md-radio-button>
+                    </div>
+                  </div>
+                </md-radio-group>
+              </div>
             </div>
 
             <div flex="50"  style="height:100%;" layout = "column"   layout-align="start center">
@@ -112,7 +137,7 @@
                   <div ng-repeat='source in sources' >
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-disabled="!source.enabled"  ng-value="source.name" class="md-primary">
+                      <md-radio-button ng-disabled="!source.enabled || settings.benchmarkInProgress"  ng-value="source.name" class="md-primary">
                          {{source.name}}
                       </md-radio-button>
                     </div>
@@ -127,7 +152,7 @@
                   <div ng-repeat='inputType in inputTypes' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-disabled="!inputType.enabled"  ng-value="inputType.name" class="md-primary">
+                      <md-radio-button ng-disabled="!inputType.enabled || settings.benchmarkInProgress"  ng-value="inputType.name" class="md-primary">
                          {{inputType.name}}
                       </md-radio-button>
                     </div>
@@ -142,7 +167,7 @@
                   <div ng-repeat='action in actions' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="action.name" class="md-primary">
+                      <md-radio-button ng-disabled="!action.enabled || settings.benchmarkInProgress" ng-value="action.name" class="md-primary">
                          {{action.name}}
                       </md-radio-button>
                     </div>
