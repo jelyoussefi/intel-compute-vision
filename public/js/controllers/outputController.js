@@ -4,11 +4,12 @@ angular.module('intelComputeVisionApp').controller('outputController', ['$scope'
 		name: '',
 		percentage:''
 	}
-
+	$scope.execTime = 0;
 	$scope.currentIndex = 0;
 
-	socket.on('predictions', function(predictions) {
+	socket.on('predictions', function(predictions,execTime) {
 		$scope.predictions = predictions;
+		$scope.execTime = execTime;
 		$scope.currentIndex = 0;
 		if ( predictions.length > 0) {
 			$scope.prediction  = predictions[0];

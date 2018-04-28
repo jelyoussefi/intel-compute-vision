@@ -42,8 +42,9 @@
               <md-icon md-svg-icon="css/images/up.svg"></md-icon>
             </md-button>
             <div flex = "50"  layout = "row" id="output"  style="width:35%" layout-align = "center center" class = "round box">
-              <div flex="0" ng-if="predictions.length > 0" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
+              <div flex="10" ng-if="predictions.length > 0" id="predictionPercentage" style="height:100%;"> {{prediction.percentage}} </div>
               <div flex="auto" ng-if="predictions.length > 0" id="predictionName" style="height:100%"> {{prediction.name}} </div>
+              <div flex="10" ng-if="predictions.length > 0" id="execTime" style="height:100%"> {{execTime}} </div>
             </div>
             <md-button ng-if="predictions.length >= 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
               <md-icon md-svg-icon="css/images/down.svg"></md-icon>
@@ -60,8 +61,8 @@
                   <div ng-repeat='chip in chips' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="chip" class="md-primary">
-                         {{chip}}
+                      <md-radio-button ng-disabled="!chip.enabled" ng-value="chip.name" class="md-primary">
+                         {{chip.name}}
                       </md-radio-button>
                     </div>
                   </div>
@@ -75,8 +76,8 @@
                   <div ng-repeat='cnn in cnns' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="cnn" class="md-primary">
-                         {{cnn}}
+                      <md-radio-button ng-disabled="!cnn.enabled"  ng-value="cnn.name" class="md-primary">
+                         {{cnn.name}}
                       </md-radio-button>
                     </div>
                   </div>
@@ -111,8 +112,8 @@
                   <div ng-repeat='source in sources' >
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="source" class="md-primary">
-                         {{source}}
+                      <md-radio-button ng-disabled="!source.enabled"  ng-value="source.name" class="md-primary">
+                         {{source.name}}
                       </md-radio-button>
                     </div>
                   </div>
@@ -126,8 +127,8 @@
                   <div ng-repeat='inputType in inputTypes' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="inputType" class="md-primary">
-                         {{inputType}}
+                      <md-radio-button ng-disabled="!inputType.enabled"  ng-value="inputType.name" class="md-primary">
+                         {{inputType.name}}
                       </md-radio-button>
                     </div>
                   </div>
@@ -135,14 +136,14 @@
                </div>
 
                 <div flex id = "actions" class = "settings" ng-controller="settingsController" >
-                <div class = "settingsTitle"> Input Type </div>
+                <div class = "settingsTitle">Actions </div>
                 <md-radio-group ng-model="settings.action" >
                   
                   <div ng-repeat='action in actions' class="rowx">
 
                     <div flex layout='row'  layout-fill layout-align="start center" class="settingsItem">
-                      <md-radio-button ng-value="action" class="md-primary">
-                         {{action}}
+                      <md-radio-button ng-value="action.name" class="md-primary">
+                         {{action.name}}
                       </md-radio-button>
                     </div>
                   </div>

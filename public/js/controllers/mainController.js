@@ -3,22 +3,23 @@ angular.module('intelComputeVisionApp').controller('mainController',  ['$scope',
   	$scope.settings = settings;
 
 	$scope.$watch('settings', function(newVal, oldVal) {
+
 		if ( newVal === oldVal ||
-			 newVal.source != oldVal.source || 
-			 newVal.inputType != oldVal.inputType ) {
+			 newVal.source != oldVal.source  || 
+			 newVal.inputType  != oldVal.inputType  ) {
 
 			var payload = {
-				'source' : $scope.settings.source,
-				'inputType' : $scope.settings.inputType
+				'source' : newVal.source,
+				'inputType' : newVal.inputType
 			}
 
 			socket.emit('getInputFiles', JSON.stringify(payload));
 		}
 
-		if ( newVal.chip != oldVal.chip ||
-			 newVal.cnn != oldVal.cnn ||
+		if ( newVal.chip != oldVal.chip  ||
+			 newVal.cnn  != oldVal.cnn  ||
 			 newVal.file != oldVal.file ||
-			 newVal.action != oldVal.action ) {
+			 newVal.action != oldVal.action  ) {
 				
     	    	socket.emit('command', JSON.stringify(newVal));
     	}

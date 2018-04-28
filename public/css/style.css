@@ -73,16 +73,28 @@ body {
 
 #output {
  	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;
-	color: #44ccb0;
+	color: #ff53b0;
 }
 
 #predictionPercentage {
 	display: flex;
  	align-items: center;
- 	justify-content: left;
-  	text-align: left;
-	font: 20px 'Open Sans', sans-serif;
+ 	justify-content: center;
+  	text-align: center;
+	font: 15px 'Open Sans', sans-serif;
 	font-weight: bold;
+	color: #5553b0;
+}
+
+#execTime {
+	display: flex;
+ 	align-items: center;
+ 	justify-content: center;
+  	text-align: center;
+	font: 15px 'Open Sans', sans-serif;
+	font-weight: bold;
+	color: #5553b0;
+
 }
 
 #predictionName {

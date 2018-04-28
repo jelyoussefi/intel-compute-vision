@@ -185,9 +185,13 @@ io.sockets.on('connection', function(socket) {
         payload = JSON.parse(payload)
         payload.topDir = __dirname;
         socket.emit('predictions', [])
-        ml.handler(payload, function(err, predictions) {
+
+        ml.handler(payload, function(err, predictions, execTime) {
             if ( !err ) {
-                socket.emit('predictions', predictions)
+
+                socket.emit('predictions', predictions, execTime)
+            }
+            else {
             }
         })
         

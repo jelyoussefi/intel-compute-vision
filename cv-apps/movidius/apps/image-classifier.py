@@ -6,19 +6,22 @@
 # ****************************************************************************
 
 # How to classify images using DNNs on Intel Neural Compute Stick (NCS)
-
-import os
+from mvnc import mvncapi as mvnc
 import sys
 import numpy
-import ntpath
+import cv2
 import argparse
-import skimage.io
-import skimage.transform
+import ntpath
+import time
+import csv
+import os
+import sys
+import re
+from os import system
 
-import mvnc.mvncapi as mvnc
 
 # Number of top prodictions to print
-NUM_PREDICTIONS      = 2
+NUM_PREDICTIONS      = 4
 
 # Variable to store commandline arguments
 ARGS                 = None
@@ -57,21 +60,20 @@ def load_graph( device ):
 def pre_process_image( img_draw ):
 
     # Resize image [Image size is defined during training]
-    img = skimage.transform.resize( img_draw, ARGS.dim, preserve_range=True )
-
-    # Convert RGB to BGR [skimage reads image in RGB, some networks may need BGR]
-    if( ARGS.colormode == "bgr" ):
-        img = img[:, :, ::-1]
+    dim = ARGS.dim.split("x")
+    img = cv2.resize(img_draw,(int(dim[0]), int(dim[1])))
 
     # Mean subtraction & scaling [A common technique used to center the data]
     img = img.astype( numpy.float16 )
     img = ( img - numpy.float16( ARGS.mean ) ) * ARGS.scale
 
-    return img
+    return img;
 
 # ---- Step 4: Read & print inference results from the NCS -------------------
 
 def infer_image( graph, img ):
+
+    labels = numpy.loadtxt(ARGS.labels,str,delimiter='\t')
 
     # The first inference takes an additional ~20ms due to memory 
     # initializations, so we make a 'dummy forward pass'.
@@ -79,7 +81,7 @@ def infer_image( graph, img ):
     output, userobj = graph.GetResult()
 
     # Load the image as a half-precision floating point array
-    graph.LoadTensor( img, 'user object' )
+    graph.LoadTensor( img, 'user object' );
 
     # Get the results from NCS
     output, userobj = graph.GetResult()
@@ -88,12 +90,13 @@ def infer_image( graph, img ):
     order = output.argsort()[::-1][:NUM_PREDICTIONS]
 
     # Get execution time
-    inference_time = graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN )
+    inference_time = numpy.sum( graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN ) )
+    inference_time = float("{0:.1f}".format(float(inference_time)))
 
     # Print the results
     print( "\n==============================================================" )
     print( "Top predictions for", ntpath.basename( ARGS.image ) )
-    print( "Execution time: " + str( numpy.sum( inference_time ) ) + "ms" )
+    print( "Execution time: " + str( inference_time ) + "ms" )
     print( "--------------------------------------------------------------" )
     for i in range( 0, NUM_PREDICTIONS ):
         print( "%3.1f%%\t" % (100.0 * output[ order[i] ] )
@@ -114,8 +117,9 @@ def main():
     device = open_ncs_device()
     graph = load_graph( device )
 
-    img_draw = skimage.io.imread( ARGS.image )
+    img_draw = cv2.imread(ARGS.image)
     img = pre_process_image( img_draw )
+
     infer_image( graph, img )
 
     close_ncs_device( device, graph )
@@ -129,15 +133,15 @@ if __name__ == '__main__':
                          Intel® Movidius™ Neural Compute Stick." )
 
     parser.add_argument( '-g', '--graph', type=str,
-                         default='../../caffe/GoogLeNet/graph',
+                         required=True,
                          help="Absolute path to the neural network graph file." )
 
     parser.add_argument( '-i', '--image', type=str,
-                         default='../../data/images/cat.jpg',
+                         required=True,
                          help="Absolute path to the image that needs to be inferred." )
 
     parser.add_argument( '-l', '--labels', type=str,
-                         default='../../data/ilsvrc12/synset_words.txt',
+                         required=True,
                          help="Absolute path to labels file." )
 
     parser.add_argument( '-M', '--mean', type=float,
@@ -147,12 +151,11 @@ if __name__ == '__main__':
 
     parser.add_argument( '-S', '--scale', type=float,
                          default=1,
-                         help="Absolute path to labels file." )
+                         help="Scale value." )
 
-    parser.add_argument( '-D', '--dim', type=int,
-                         nargs='+',
-                         default=[224, 224],
-                         help="Image dimensions. ex. -D 224 224" )
+    parser.add_argument( '-D', '--dim', type=str,
+                         required=True,
+                         help="Image dimensions. ex. -D 224x224" )
 
     parser.add_argument( '-c', '--colormode', type=str,
                          default="bgr",
@@ -160,10 +163,7 @@ if __name__ == '__main__':
 
     ARGS = parser.parse_args()
 
-    # Load the labels file
-    labels =[ line.rstrip('\n') for line in
-              open( ARGS.labels ) if line != 'classes\n']
-
+    
     main()
 
 # ==== End of file ===========================================================
