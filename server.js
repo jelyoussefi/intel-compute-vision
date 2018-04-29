@@ -75,18 +75,20 @@ app.use(function(err, req, res, next) {
 usbDetect.startMonitoring();
 usbDetect.on('add', function(device) { 
     if ( parseInt(device.vendorId) != 999 ) { //Movidius CS
-            console.log("vendorId2 " + device.vendorId)
-
         setTimeout( function() {
+            updateSettings(sockets);
             sendInputFiles();
         }, 3000);
     }
 });
 
 usbDetect.on('remove', function(device) { 
+
     if ( parseInt(device.vendorId) != 999 ) { //Movidius CS
+        updateSettings(sockets);
         sendInputFiles();
     }
+
 });
 
 
@@ -160,9 +162,12 @@ function sendInputFiles() {
     })
 }
 
-
-function classify(payload, cb ) {
-
+function updateSettings(socks) {
+    socks.forEach(function(socket) {
+        ml.getSettings( function(settings) {
+            socket.emit('settings', JSON.stringify(settings));
+        })
+    })
 }
 
 io.sockets.on('connection', function(socket) {
@@ -171,8 +176,8 @@ io.sockets.on('connection', function(socket) {
 
     sockets.push(socket);
 
-    socket.emit('settings', JSON.stringify(ml.settings()));
-    
+    updateSettings([socket]);
+
     socket.on( 'getInputFiles', function(payload) {
         payload = JSON.parse(payload);
         settings.input.source = payload.source;
@@ -188,10 +193,7 @@ io.sockets.on('connection', function(socket) {
 
         ml.handler(payload, function(err, predictions, execTime) {
             if ( !err ) {
-
                 socket.emit('predictions', predictions, execTime)
-            }
-            else {
             }
         })
         

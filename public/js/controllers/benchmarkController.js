@@ -3,53 +3,43 @@ angular.module('intelComputeVisionApp').controller('benchmarkController',  ['$sc
   	$scope.settings = settings;
 	$scope.labels = [];
 	$scope.data = [];
-	$scope.currentIndex=0;
-	$scope.remaining=0;
 	$scope.enabledCNNs = [];
+	$scope.currentIndex=-1;
 
-	$scope.nextCNN = function () {
-		if ( $scope.remaining > 0 ) {
-			if ( $scope.currentIndex >= $scope.enabledCNNs.length ) {
-				$scope.currentIndex = 0;
-			}
-			$scope.settings.cnn = $scope.enabledCNNs[$scope.currentIndex].name;
+	$scope.$watchCollection('currentIndex', function(index) {
+		if ( index>= 0 && index < $scope.enabledCNNs.length ) {
+			var payload = $scope.settings;
+			payload.cnn = $scope.enabledCNNs[$scope.currentIndex].name;
+			socket.emit('command', JSON.stringify(payload));
 		}
 		else {
 			$scope.settings.benchmarkInProgress = false;
 		}
+	});
 
-	}
-
-	$scope.$watch('settings.benchmark', function(newVal, oldVal) {
+	$scope.$watchCollection('settings.benchmark', function(benchmark) {
 		$scope.labels = [];
 		$scope.data = [];
-		$scope.currentIndex=-1;
 		$scope.settings.benchmarkInProgress = false;
-		if ( newVal == 'CNNs') {
-			$scope.settings.benchmarkInProgress = true;
+		$scope.currentIndex=-1;
+
+		if ( benchmark == 'CNNs') {
 			$scope.enabledCNNs = $scope.settings.enabledCNNs();
-			for(var i=0; i<$scope.enabledCNNs.length; i++) {
-				if ($scope.enabledCNNs[i].name == $scope.settings.cnn ) {
-					$scope.currentIndex = i;
-					$scope.remaining = $scope.enabledCNNs.length;
-					break;
-				}
-			}
-			if ( $scope.currentIndex >= 0 ) {
-				$scope.nextCNN();
+			if ( $scope.enabledCNNs.length > 0 ) {
+				$scope.settings.benchmarkInProgress = true;
+				$scope.currentIndex=0;
 			}
 		}
 
-	}, true);
+	});
 
 
 	socket.on('predictions', function(predictions,execTime) {
-		if ( execTime && $scope.settings.benchmarkInProgress > 0) {
+		if ( predictions.length > 0 && $scope.settings.benchmarkInProgress ) {
+			console.log("------")
 			$scope.labels.push($scope.settings.cnn);
 			$scope.data.push(parseFloat(execTime.split("ms")[0]));
-			$scope.remaining--;
 			$scope.currentIndex++;
-			$scope.nextCNN();
 		}
 
 	})

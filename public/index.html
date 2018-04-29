@@ -41,7 +41,7 @@
       <div id = "layoutContainer" ng-cloak  layout = "column"  ng-controller="mainController" >
     
         <div flex ="30" id = "row1"  layout = "column"  layout-align="center center" >
-            <div flex="100" ng-if="settings.benchmark=='None'" layout = "column"  style="width:100%"  layout-align="center center"  ng-controller="outputController" >
+            <div flex="100" ng-if="settings.benchmark == 'None'" layout = "column"  style="width:100%"  layout-align="center center"  ng-controller="outputController" >
               <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="upButton"  ng-click="nextPrediction()">
                 <md-icon md-svg-icon="css/images/up.svg"></md-icon>
               </md-button>
@@ -55,7 +55,7 @@
               </md-button>
             </div>
 
-            <div flex="80" ng-if="settings.benchmark!='None'" style="width:35%" layout = "column"   layout-align="center center" class = "round box" ng-controller="benchmarkController">
+            <div flex="80" ng-if="settings.benchmark != 'None'" style="width:35%" layout = "column"   layout-align="center center" class = "round box" ng-controller="benchmarkController">
               <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" height="100">
               </canvas>
             </div>

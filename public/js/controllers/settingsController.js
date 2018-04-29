@@ -57,6 +57,24 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		return actions;
 	}
 
+	$scope.updateActions = function () {
+		$scope.actions.forEach(function(action) {
+			if ( action.hasOwnProperty('enabledFor')  ) {
+				action.enabled = false;
+				if ( action.enabledFor.hasOwnProperty('inputTypes') ) {
+					action.enabledFor.inputTypes.forEach(function(inputType) {
+						if ( inputType == $scope.settings.inputType ) {
+							action.enabled = true;
+						}
+					})					
+				}
+			}
+		})
+		if (!$scope.settings.action.trim()) {
+			$scope.settings.action = $scope.settings.enabledActions().length > 0 ? $scope.settings.enabledActions()[0].name:'';
+		}
+	}
+
 	$scope.benchmarks = [
 		{
 			name: 'None',
@@ -73,6 +91,7 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 	];
 
 	socket.on('settings', function(payload) {
+		console.log("Setting " +payload)
 		payload = JSON.parse(payload);
 		$scope.sources = payload.sources;
 		$scope.inputTypes = payload.inputTypes;
@@ -83,7 +102,7 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		$scope.settings.inputType = $scope.settings.enabledInputTypes().length > 0 ? $scope.settings.enabledInputTypes()[0].name:'';
 		$scope.settings.chip = $scope.settings.enabledChips().length > 0 ? $scope.settings.enabledChips()[0].name:'';
 		$scope.settings.cnn = $scope.settings.enabledCNNs().length > 0 ? $scope.settings.enabledCNNs()[0].name:'';
-		$scope.settings.action = $scope.settings.enabledActions().length > 0 ? $scope.settings.enabledActions()[0].name:'';
+		$scope.updateActions();
 	})
 
 
@@ -93,6 +112,10 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		$scope.settings.autoplaySpeed = 5000;
 		$scope.settings.init = true;
 	}
+
+	$scope.$watch('settings.inputType', function(newVal, oldVal) {
+		$scope.updateActions();
+	}, true);
 
  
 }]);

@@ -28,6 +28,7 @@
     "request": "^2.67.0",
     "socket.io": "^2.1.0",
     "static-favicon": "*",
-    "usb-detection": "^2.1.0"
+    "usb-detection": "^2.1.0",
+    "synchronize": "*"
   }
 }
