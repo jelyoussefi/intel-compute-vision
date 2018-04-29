@@ -53,6 +53,10 @@ alexnet:
 	@$(call msg,"making alexet")
 	(cd ./ncappzoo/caffe/AlexNet; make compile;)
 
+.PHONY: mobilenet-ssd
+mobilenet-ssd:
+	@$(call msg,"making alexet")
+	(cd ./ncappzoo/caffe/SSD_MobileNet; make compile;)
 
 
 #----------------------------------------------------------------------------------------------------------------------

@@ -61,13 +61,30 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		$scope.actions.forEach(function(action) {
 			if ( action.hasOwnProperty('enabledFor')  ) {
 				action.enabled = false;
+				var enabledForInputType = false;
+				var enabledForCnn = false;
 				if ( action.enabledFor.hasOwnProperty('inputTypes') ) {
 					action.enabledFor.inputTypes.forEach(function(inputType) {
 						if ( inputType == $scope.settings.inputType ) {
-							action.enabled = true;
+							enabledForInputType = true;
+						}
+					})					
+				} 
+				else {
+					enabledForInputType = true;
+				}
+				if ( action.enabledFor.hasOwnProperty('cnns') ) {
+					action.enabledFor.cnns.forEach(function(cnn) {
+						if ( cnn == $scope.settings.cnn ) {
+							enabledForCnn = true;
 						}
 					})					
 				}
+				else {
+					enabledForCnn = true;	
+				}
+				action.enabled =  enabledForInputType && enabledForCnn;
+
 			}
 		})
 		if (!$scope.settings.action.trim()) {
@@ -91,7 +108,6 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 	];
 
 	socket.on('settings', function(payload) {
-		console.log("Setting " +payload)
 		payload = JSON.parse(payload);
 		$scope.sources = payload.sources;
 		$scope.inputTypes = payload.inputTypes;
@@ -117,5 +133,8 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		$scope.updateActions();
 	}, true);
 
+	$scope.$watch('settings.cnn', function(newVal, oldVal) {
+		$scope.updateActions();
+	}, true);
  
 }]);
