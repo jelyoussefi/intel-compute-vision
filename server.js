@@ -25,7 +25,7 @@ var settings = {
     }
 };
 
-
+var outputFile = "files/object-detection.png"
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -189,11 +189,18 @@ io.sockets.on('connection', function(socket) {
     socket.on( 'command', function(payload) {
         payload = JSON.parse(payload)
         payload.topDir = __dirname;
+        payload.outputFile = path.join(__dirname, 'public');
+        payload.outputFile =  path.join(payload.outputFile, outputFile);
         socket.emit('predictions', [])
-
-        ml.handler(payload, function(err, predictions, execTime) {
+        if (fs.existsSync(payload.outputFile)) {
+            fs.unlinkSync(payload.outputFile);
+        }
+        ml.handler(payload, function(err, predictions, execTime, displayOutputFile) {
             if ( !err ) {
-                socket.emit('predictions', predictions, execTime)
+                socket.emit('predictions', predictions, execTime);
+                if ( displayOutputFile ) {
+                    socket.emit('outputFile', outputFile);
+                }
             }
         })
         

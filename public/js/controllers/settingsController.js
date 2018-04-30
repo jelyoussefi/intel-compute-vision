@@ -85,6 +85,8 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 				}
 				action.enabled =  enabledForInputType && enabledForCnn;
 
+
+
 			}
 		})
 		if (!$scope.settings.action.trim()) {
@@ -104,7 +106,7 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		{
 			name: 'CNNs',
 			enabled: true
-		}
+		} 
 	];
 
 	socket.on('settings', function(payload) {
@@ -129,12 +131,20 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 		$scope.settings.init = true;
 	}
 
-	$scope.$watch('settings.inputType', function(newVal, oldVal) {
+	$scope.$watchCollection('settings.inputType', function(inputType) {
 		$scope.updateActions();
-	}, true);
+	});
 
-	$scope.$watch('settings.cnn', function(newVal, oldVal) {
+	$scope.$watchCollection('settings.cnn', function(cnn) {
 		$scope.updateActions();
-	}, true);
+	});
+
+	$scope.$watchCollection('settings.action', function(action) {
+		$scope.actions.forEach(function(action_) {
+			if ( action_.name == action ) {
+				$scope.settings.mediaOutputEnabled = action_.hasMediaOutput;
+			}
+		})
+	});
  
 }]);

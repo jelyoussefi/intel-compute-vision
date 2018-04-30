@@ -6,15 +6,8 @@ angular.module('intelComputeVisionApp').controller('outputController', ['$scope'
 	}
 	$scope.execTime = 0;
 	$scope.currentIndex = 0;
-
-	socket.on('predictions', function(predictions,execTime) {
-		$scope.predictions = predictions;
-		$scope.execTime = execTime;
-		$scope.currentIndex = 0;
-		if ( predictions.length > 0) {
-			$scope.prediction  = predictions[0];
-		}
-	})
+	$scope.outputFile = 0;
+	$scope.mediaReady = false;
 
 	$scope.nextPrediction = function () {
 		$scope.currentIndex++;
@@ -32,4 +25,23 @@ angular.module('intelComputeVisionApp').controller('outputController', ['$scope'
     	$scope.prediction  = $scope.predictions[$scope.currentIndex];
   	};
 
+	socket.on('predictions', function(predictions,execTime) {
+		$scope.predictions = predictions;
+		$scope.execTime = execTime;
+		$scope.currentIndex = 0;
+		if ( predictions.length > 0) {
+			$scope.prediction  = predictions[0];
+		}
+		else {
+			$scope.mediaReady = false;
+		}
+	})
+
+	socket.on('outputFile', function(outputFile) {
+		console.log("Output : " + outputFile)
+		$scope.outputFile = outputFile+'?_ts='+new Date().getTime();
+		$scope.mediaReady = true;
+	})
+
+	
 }]);

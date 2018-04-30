@@ -41,7 +41,7 @@
       <div id = "layoutContainer" ng-cloak  layout = "column"  ng-controller="mainController" >
     
         <div flex ="30" id = "row1"  layout = "column"  layout-align="center center" >
-            <div flex="100" ng-if="settings.benchmark == 'None'" layout = "column"  style="width:100%"  layout-align="center center"  ng-controller="outputController" >
+            <div flex="100" ng-if="settings.benchmark == 'None' && !settings.mediaOutputEnabled" layout = "column"  style="width:100%"  layout-align="center center"  ng-controller="outputController" >
               <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="upButton"  ng-click="nextPrediction()">
                 <md-icon md-svg-icon="css/images/up.svg"></md-icon>
               </md-button>
@@ -50,14 +50,18 @@
                 <div flex="80" ng-if="predictions.length > 0" id="predictionName" style="height:100%"> {{prediction.name}} </div>
                 <div flex="10" ng-if="predictions.length > 0" id="execTime" style="height:100%"> {{execTime}} </div>
               </div>
-              <md-button ng-if="predictions.length >= 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
+              <md-button ng-if="predictions.length > 1" class="md-icon-button md-accent" id="downButton" ng-click="prevPrediction()">
                 <md-icon md-svg-icon="css/images/down.svg"></md-icon>
               </md-button>
             </div>
 
-            <div flex="80" ng-if="settings.benchmark != 'None'" style="width:35%" layout = "column"   layout-align="center center" class = "round box" ng-controller="benchmarkController">
-              <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" height="100">
+            <div flex="80" ng-if="settings.benchmark != 'None' && !settings.mediaOutputEnabled" style="width:35%" layout = "column"   layout-align="center center" class = "round box" ng-controller="benchmarkController">
+              <canvas id="bar" class="chart chart-bar" chart-data="data" chart-labels="labels" chart-options="options"  chart-series="series" height="100">
               </canvas>
+            </div>
+
+            <div flex="80" ng-if="settings.benchmark == 'None' && settings.mediaOutputEnabled " id="outputMediaContainer"  style="width:33%", layout = "column"   layout-align="center center" class = "nround " ng-controller="outputController">
+                <img  ng-if = "mediaReady" ng-src="{{ outputFile }}"  style="width:100%; height:100%" >
             </div>
 
         </div>

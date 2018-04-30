@@ -16,6 +16,10 @@ angular.module('intelComputeVisionApp').controller('mainController',  ['$scope',
 			socket.emit('getInputFiles', JSON.stringify(payload));
 		}
 		
+		if ( newVal.benchmark == "None" ) {
+			$scope.settings.benchmarkInProgress = false;
+		}
+
 		if ( newVal.chip != oldVal.chip  ||
 			 newVal.cnn  != oldVal.cnn  ||
 			 newVal.file != oldVal.file ||

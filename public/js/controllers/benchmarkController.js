@@ -1,10 +1,21 @@
 angular.module('intelComputeVisionApp').controller('benchmarkController',  ['$scope', 'settings', 'socket', function($scope, settings, socket) {
   
   	$scope.settings = settings;
-	$scope.labels = [];
-	$scope.data = [];
 	$scope.enabledCNNs = [];
 	$scope.currentIndex=-1;
+	$scope.labels = [];
+	$scope.data = [];
+	$scope.options = {
+		scales: {
+		    yAxes: [{
+		      scaleLabel: {
+		        display: true,
+		        labelString: 'Execution time'
+		      }
+		    }]
+	  	}
+	}
+
 
 	$scope.$watchCollection('currentIndex', function(index) {
 		if ( index>= 0 && index < $scope.enabledCNNs.length ) {
@@ -36,7 +47,6 @@ angular.module('intelComputeVisionApp').controller('benchmarkController',  ['$sc
 
 	socket.on('predictions', function(predictions,execTime) {
 		if ( predictions.length > 0 && $scope.settings.benchmarkInProgress ) {
-			console.log("------")
 			$scope.labels.push($scope.settings.cnn);
 			$scope.data.push(parseFloat(execTime.split("ms")[0]));
 			$scope.currentIndex++;

@@ -28,6 +28,7 @@ icvServices.factory('settings', function() {
 	              autoScrollEnabled: '',
 	              autoplaySpeed: '',
 	              benchmarkInProgress: false,
-	              benchmarkEnabled: false
+	              benchmarkEnabled: false,
+	              mediaOutputEnabled: false
        };
 });

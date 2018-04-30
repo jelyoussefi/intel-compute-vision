@@ -1,15 +1,14 @@
 
 body {
 	position: absolute;
+//	background-size: 100% 100%;
+	background-color: #0081c5;
 
-//	background: url(images/intel-cv.png) no-repeat center fixed; 
-	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
-	background-size: cover; /* version standardisée */
 }
 
 #layoutContainer 
 {
-		position: absolute;
+			background: url(images/intel-logo.png) no-repeat  fixed; 
 
 	width: 100vw;
 	height: 100vh;
@@ -22,20 +21,22 @@ body {
 .box 
 {
 	padding: 20px;
+	background: white;
+	opacity: 1;
 }
 
 
 .round 
 {
-	border: 1px solid #4553b0;
+	border: 2px solid #4553b0;
 	border-radius: 12px;
-	box-shadow: -1px -1px 1px #d4d4d4, 5px 5px 5px #999;
+	box-shadow: -1px -1px 1px #d4d4d4, 5px 5px 5px #555;
 }
 
 .nround 
 {
 	border: 2px solid #4553b0;
-	box-shadow: -2px -2px 2px #d4d4d4, 6px 6px 6px #999;
+	box-shadow: -2px -2px 2px #d4d4d4, 6px 6px 6px #555;
 }
 
 
@@ -46,7 +47,7 @@ body {
 	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;
 	color: #4553b0;
 	font: 20px 'Open Sans', sans-serif;
-	opacity: 0.75;
+	//opacity: 0.75;
 	font-weight: bold;
 }
 
@@ -69,6 +70,8 @@ body {
 #input {
 	width: 904px;
 	height: 510px;
+	padding: 0;
+	margin: 0;
 }
 
 #output {
@@ -114,4 +117,10 @@ body {
 #downButton {
 	margin-top: -8px;
 	opacity: 0.2;
+}
+
+#outputMediaContainer {
+	padding: 0;
+	margin: 0;
+
 }
