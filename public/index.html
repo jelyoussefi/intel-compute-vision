@@ -61,7 +61,8 @@
             </div>
 
             <div flex="80" ng-if="settings.benchmark == 'None' && settings.mediaOutputEnabled " id="outputMediaContainer"  style="width:33%", layout = "column"   layout-align="center center" class = "nround " ng-controller="outputController">
-                <img  ng-if = "mediaReady" ng-src="{{ outputFile }}"  style="width:100%; height:100%" >
+                <img  ng-if = "mediaReady && settings.inputType=='Image'" ng-src="{{ outputFile }}"  style="width:100%; height:100%" >
+                <video  ng-if = "mediaReady && settings.inputType=='Video'" ng-src="{{ outputFile }}"  style="width:100%; height:100%" >
             </div>
 
         </div>

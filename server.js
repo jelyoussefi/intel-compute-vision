@@ -25,7 +25,8 @@ var settings = {
     }
 };
 
-var outputFile = "files/object-detection.png"
+var publicPath = path.join(__dirname, 'public')
+var outputFilePath = path.join(publicPath, 'files/')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +37,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(publicPath));
 app.use(express.static('/media/jelyouss/boot/'));
 
 app.use('/', routes);
@@ -189,17 +190,20 @@ io.sockets.on('connection', function(socket) {
     socket.on( 'command', function(payload) {
         payload = JSON.parse(payload)
         payload.topDir = __dirname;
-        payload.outputFile = path.join(__dirname, 'public');
-        payload.outputFile =  path.join(payload.outputFile, outputFile);
+        payload.outputFilePath =  outputFilePath;
+       
         socket.emit('predictions', [])
         if (fs.existsSync(payload.outputFile)) {
             fs.unlinkSync(payload.outputFile);
         }
-        ml.handler(payload, function(err, predictions, execTime, displayOutputFile) {
+        ml.handler(payload, function(err, predictions, execTime, outputFile) {
             if ( !err ) {
-                socket.emit('predictions', predictions, execTime);
-                if ( displayOutputFile ) {
-                    socket.emit('outputFile', outputFile);
+                if ( predictions ) {
+                    socket.emit('predictions', predictions, execTime);
+                }
+                if ( outputFile ) {
+                    console.log("======"+outputFile)
+                    socket.emit('outputFile', outputFile.substring(publicPath.length));
                 }
             }
         })
