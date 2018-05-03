@@ -13,8 +13,6 @@ intelComputeVisionApp.directive('resize', [
               ratio = parseFloat($scope.$eval($attributes.ratio));
             }   
             height = (width * ratio)/100;
-            console.log("w : "+width + " x "+height)
-
             $element.css('height', height + 'px');
         }
 

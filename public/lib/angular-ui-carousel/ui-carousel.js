@@ -574,7 +574,6 @@ angular.module('ui.carousel.controllers').controller('CarouselController', ['$sc
       _this.isClickablePrev = false;
       _this.isClickableNext = false;
     }
-
     // Re-init UI
     _this.initUI();
   };
@@ -582,7 +581,7 @@ angular.module('ui.carousel.controllers').controller('CarouselController', ['$sc
   /**
    * refresh model
    */
-  $scope.$watchCollection('ctrl.slides', function (slides) {
+  $scope.$watch('ctrl.slides', function (slides) {
     if (!slides) {
       return;
     }
@@ -594,7 +593,7 @@ angular.module('ui.carousel.controllers').controller('CarouselController', ['$sc
 
     _this.setupInfinite();
     _this.refreshCarousel();
-  });
+  }, true);
 
   $scope.$watchCollection('ctrl.autoplay', function (autoplay) {
       _this.options.autoplay = autoplay

@@ -38,11 +38,5 @@ angular.module('intelComputeVisionApp').controller('outputController', ['$scope'
 		}
 	})
 
-	socket.on('outputFile', function(outputFile) {
-		console.log("Output : " + outputFile)
-		$scope.outputFile = outputFile+'?_ts='+new Date().getTime();
-		$scope.mediaReady = true;
-	})
-
 	
 }]);

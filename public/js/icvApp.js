@@ -7,6 +7,7 @@ var intelComputeVisionApp = angular.module('intelComputeVisionApp', [
                                                                       'ngMaterial', 
                                                                       'ngMessages', 
                                                                       'ngAria',
+                                                                      'ngAnimate',
                                                                       'ui.carousel',
                                                                       'ngSanitize',
                                                                       'vcRecaptcha',

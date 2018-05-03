@@ -250,7 +250,6 @@ io.sockets.on('connection', function(socket) {
             fs.unlinkSync(payload.outputFile);
         }
         ml.handler(payload, function(err, predictions, execTime, outputFile) {
-            console.log(predictions)
             if ( !err ) {
                 if ( predictions ) {
                     socket.emit('predictions', predictions, execTime);
@@ -258,6 +257,9 @@ io.sockets.on('connection', function(socket) {
                 if ( outputFile ) {
                     socket.emit('outputFile', outputFile.substring(publicPath.length));
                 }
+            }
+            else {
+                console.log("error "+err)
             }
         })
         

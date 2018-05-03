@@ -9,13 +9,15 @@
             autoplay="settings.autoScrollEnabled"
             autoplay-speed="settings.autoplaySpeed"
             on-init="onCarouselInit()"
+            on-before-change="onBeforeChange(currentSlide)"
             on-after-change="onAfterChange(currentSlide)"
-            fade="true"
+            fade="false"
+            infinite="true"
             dots="true" >
 
             <carousel-item  >
 
-                <img  ng-src="{{ item.path }}" resize  ratio="56.25"  >
+                <img  ng-src="{{ item.hasOutputFile ? item.outputFile : item.src }}" resize  ratio="56.25"  >
 
             </carousel-item>
 
