@@ -8,12 +8,12 @@ body {
 
 #layoutContainer 
 {
-			background: url(images/intel-logo.png) no-repeat  fixed; 
+	background: url(images/intel-logo.png) no-repeat  fixed; 
 
 	width: 100vw;
 	height: 100vh;
 
-	padding: 20px;
+	padding: 40px;
 	
 	opacity: 1;
 }
@@ -25,6 +25,13 @@ body {
 	opacity: 1;
 }
 
+
+img { 
+ width: 100%;
+ height: 200px;
+    object-fit: fill;
+
+}
 
 .round 
 {
@@ -51,7 +58,7 @@ body {
 	font-weight: bold;
 }
 
-.settings
+.settings:not(:last-child)
 {
 	margin: 0;
 	padding: 0;
@@ -67,12 +74,7 @@ body {
 	font-weight: bold;
 }
 
-#input {
-	width: 904px;
-	height: 510px;
-	padding: 0;
-	margin: 0;
-}
+
 
 #output {
  	text-shadow: -1px -1px 1px #d4d4d4, 1px 1px 1px #999;

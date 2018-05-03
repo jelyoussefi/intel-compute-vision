@@ -1,4 +1,4 @@
-angular.module('intelComputeVisionApp').controller('settingsController', ['$scope', 'settings', 'socket', function($scope, settings, socket) {
+angular.module('intelComputeVisionApp').controller('settingsController', ['$scope', '$element', '$attrs', 'settings', 'socket', function($scope, element, attrs, settings, socket) {
   	$scope.settings = settings;
 
 	$scope.sources = [];

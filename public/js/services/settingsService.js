@@ -18,6 +18,7 @@
 icvServices.factory('settings', function() {
        return { 
        			  init: false,
+       			  slides:[],
 	              source: '',
 	              inputType: '',
 	              chip: '',

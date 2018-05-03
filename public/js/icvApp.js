@@ -18,3 +18,4 @@ var intelComputeVisionApp = angular.module('intelComputeVisionApp', [
        .factory('socket', function (socketFactory) {
               return socketFactory();
        });
+

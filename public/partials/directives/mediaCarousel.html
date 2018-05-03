@@ -1,6 +1,6 @@
-<div>
-    <div ng-show="settings.inputType == 'Image'">
-        <ui-carousel 
+<div flex="auto"  >
+
+        <ui-carousel   ng-if="settings.inputType == 'Image'" style="margin: 0 auto;" 
 
             slides="slides"
             slides-to-show="1"
@@ -15,34 +15,11 @@
 
             <carousel-item  >
 
-                <img  ng-src="{{ item.path }}"  >
+                <img  ng-src="{{ item.path }}" resize  ratio="56.25"  >
 
             </carousel-item>
 
 
         </ui-carousel>
-    </div>
-
-    <div ng-show="settings.inputType == 'Video'">
-        <ui-carousel 
-
-            slides="slides"
-            slides-to-show="1"
-            slides-to-scroll="1"
-            initial-slide="0"
-            autoplay="settings.autoScrollEnabled"
-            autoplay-speed="settings.autoplaySpeed"
-            on-init="onCarouselInit()"
-            on-after-change="onAfterChange(currentSlide)"
-            fade="true"
-            dots="true" >
-
-            <carousel-item  >
-
-                <video  ng-src="{{ item.path }}" controls  allowfullscreen="false" >
-
-            </carousel-item>
-
-        </ui-carousel>
-    </div>
-</div>
+  
+  </div>

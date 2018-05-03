@@ -1,5 +1,6 @@
-angular.module('intelComputeVisionApp').controller('mainController',  ['$scope', 'settings', 'socket', function($scope, settings, socket) {
+angular.module('intelComputeVisionApp').controller('mainController',  ['$scope', '$element', '$attrs', 'settings', 'socket', function($scope, $element, $attrs, settings, socket) {
   
+
   	$scope.settings = settings;
 
 	$scope.$watch('settings', function(newVal, oldVal) {

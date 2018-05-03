@@ -11,7 +11,16 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
         }, true)
 
         socket.on('setInputFiles', function(files) {
-          scope.slides = JSON.parse(files);
+                                scope.slides = JSON.parse(files);
+
+          if (settings.inputType=="Image") {
+          } 
+          else {
+                         scope.slides.push ( { path:"video.mp4"} )
+                      console.log("======== "+ scope.slides)
+
+          }
+
         })
         
         scope.onCarouselInit =  function() { }

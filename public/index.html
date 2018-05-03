@@ -17,8 +17,9 @@
   <script src="lib/angular-recaptcha/release/angular-recaptcha.js"></script>
   <script src="lib/chart.js/dist/Chart.min.js"></script>
   <script src="lib/angular-chart.js/dist/angular-chart.min.js"></script>
+  <script src="lib/ng-resize/dist/ng-resize.js"></script>
+
   <script src="js/ui-bootstrap-tpls-0.14.3.js"></script>
-  
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
   <link href="css/mediaCarousel.css" rel="stylesheet">
@@ -35,6 +36,7 @@
   <script src="js/controllers/benchmarkController.js"></script>
   <script src="js/services/settingsService.js"></script>
   <script src="js/directives/mediaCarousel.js"></script>
+  <script src="js/directives/resize.js"></script>
 
 </head>
 <body ng-app = "intelComputeVisionApp"> 
@@ -116,22 +118,12 @@
               </div>
             </div>
 
-            <div flex="50"  style="height:100%;" layout = "column"   layout-align="start center">
 
-              <div flex="none" id = "input"   class = "nround" ng-controller="settingsController" >
+           <div flex="50"  id="inputContainer"  layout = "row"   layout-align="center center" >
+                <media-carousel >  
 
-               <media-carousel  >
-
-              </div>
-
-
-              <div flex="10"  layout = "column" style="margin-top: 40px;" layout-padding layout-align = "center center" class = "round box" ng-controller="settingsController">
-                  <div class = "settingsTitle">
-                    <label for="autoScroll">Auto Scroll: </label>
-                    <input id="autoScroll" type="checkbox" ng-model="settings.autoScrollEnabled" />
-                  </div>
-              </div>
-           </div>
+          </div>
+          
 
             <div flex="15"  layout = "column"  class = "rightContol round box"  >
                

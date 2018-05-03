@@ -8,6 +8,7 @@ angular.module('intelComputeVisionApp').controller('outputController', ['$scope'
 	$scope.currentIndex = 0;
 	$scope.outputFile = 0;
 	$scope.mediaReady = false;
+	$scope.videoFile = 'video.mp4'+'?_ts='+new Date().getTime();
 
 	$scope.nextPrediction = function () {
 		$scope.currentIndex++;
