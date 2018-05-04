@@ -92,16 +92,15 @@ def infer_image( graph, img ):
     # Get execution time
     inference_time = numpy.sum( graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN ) )
     inference_time = float("{0:.1f}".format(float(inference_time)))
-
-    # Print the results
-    print( "\n==============================================================" )
-    print( "Top predictions for", ntpath.basename( ARGS.image ) )
-    print( "Execution time: " + str( inference_time ) + "ms" )
-    print( "--------------------------------------------------------------" )
+    output_str  = "\n==============================================================\n"
+    output_str += "Top predictions for " + ntpath.basename( ARGS.image ) + "\n"
+    output_str += "Execution time: " + str( inference_time ) + "ms\n" 
+    output_str += "--------------------------------------------------------------\n"
     for i in range( 0, NUM_PREDICTIONS ):
-        print( "%3.1f%%\t" % (100.0 * output[ order[i] ] )
-               + labels[ order[i] ] )
-    print( "==============================================================" )
+        output_str +=  "%3.1f%%\t" % (100.0 * output[ order[i] ] ) + labels[ order[i] ] + "\n"
+    output_str += "==============================================================";
+
+    print(output_str)
 
 
 # ---- Step 5: Unload the graph and close the device -------------------------

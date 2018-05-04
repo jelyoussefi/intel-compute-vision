@@ -20,12 +20,17 @@ var ml = require('./lib/handlers');
 var video    = express();
 
 var sockets = [];
+var currentCmdProcId = -1;
+var imageOutputFile = "image_output.png";
+var videoOutputFile = "video_output.png";
+
 var settings = {
     input: {
         source: '',
         type: '',
     }
 };
+
 
 var publicPath = path.join(__dirname, 'public')
 var outputFilePath = path.join(publicPath, 'files/')
@@ -174,6 +179,18 @@ function updateSettings(socks) {
         })
     })
 }
+
+function setOutputFile(settings) {
+    settings.outputFilePath =  outputFilePath;
+
+    if ( settings.inputType == "Image") {
+        settings.outputFile = settings.outputFilePath + imageOutputFile;
+    }
+    else if ( settings.inputType == "Video") {
+        settings.outputFile = settings.outputFilePath + videoOutputFile;
+    }
+}
+
 //-----------------------------------------------------------------------------------------------------
 //  Video
 //-----------------------------------------------------------------------------------------------------
@@ -218,7 +235,15 @@ video.get('/', function (req, res) {
         });
     }
 });
-    
+
+function isProcessRunning(pid) {
+    try {
+        return process.kill(pid,0)
+    }
+    catch (e) {
+        return e.code === 'EPERM'
+    }
+}
 //-----------------------------------------------------------------------------------------------------
 //  Clients's Connection 
 //-----------------------------------------------------------------------------------------------------
@@ -243,26 +268,37 @@ io.sockets.on('connection', function(socket) {
     socket.on( 'command', function(payload) {
         payload = JSON.parse(payload)
         payload.topDir = __dirname;
-        payload.outputFilePath =  outputFilePath;
        
+        if ( currentCmdProcId != -1 && isProcessRunning(currentCmdProcId) ) {
+            process.kill(-currentCmdProcId);
+            currentCmdProcId = -1;
+        }
+
+           
         socket.emit('predictions', [])
         if (fs.existsSync(payload.outputFile)) {
             fs.unlinkSync(payload.outputFile);
         }
-        ml.handler(payload, function(err, predictions, execTime, outputFile) {
+        setOutputFile(payload);
+        payload.env = process.env;
+
+        ml.handler(payload, function(err, result) {
             if ( !err ) {
-                if ( predictions ) {
-                    socket.emit('predictions', predictions, execTime);
+                if( result.procId ) {
+                    currentCmdProcId = parseInt(result.procId);
+                    console.log(currentCmdProcId)
                 }
-                if ( outputFile ) {
-                    socket.emit('outputFile', outputFile.substring(publicPath.length));
+                if ( result.predictions ) {
+                    socket.emit('predictions', result.predictions, result.execTime);
+                }
+                if ( result.outputFile ) {
+                    socket.emit('outputFile', result.outputFile.substring(publicPath.length));
                 }
             }
             else {
                 console.log("error "+err)
             }
-        })
-        
+        })        
     });
 
     socket.on('disconnect', function () {

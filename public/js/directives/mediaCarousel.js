@@ -11,6 +11,13 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
           scope.slides = [];
         }, true)
 
+        scope.$watch('settings.action', function(newVal, oldVal) {
+          scope.slides.forEach(function(slide) {
+            slide.outputFile = null;
+            slide.hasOutputFile = false;
+          })
+        }, true)
+
         socket.on('setInputFiles', function(files) {
           scope.slides = JSON.parse(files);
           scope.slides.forEach(function(slide) {
@@ -21,11 +28,9 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
         })
         
         socket.on('outputFile', function(outputFile) {
-
           if ( scope.currentIndex >= 0 && scope.currentIndex < scope.slides.length ) {
             scope.slides[scope.currentIndex].outputFile =  outputFile+'?_ts='+new Date().getTime();;
           }
-
          
         })
 
@@ -47,7 +52,6 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
               }
               else {
                 if ( scope.slides[scope.currentIndex].outputFile ) {
-                  console.log("---"+ currentSlide + " : " +scope.slides[scope.currentIndex].outputFile )
                   scope.slides[i].hasOutputFile = true;
                 }
               }

@@ -98,14 +98,15 @@ def infer_image( graph, img, frame ):
                       frame.shape )
 
     # Print the results (each image/frame may have multiple objects)
-    print( "Execution time:"
-            + "%.1fms" % ( numpy.sum( inference_time ) ) )
+    output_str  = "\n==============================================================\n"
+    output_str += "Execution time: "+ "%.1fms" % ( numpy.sum( inference_time )) + "\n"
 
     for i in range( 0, output_dict['num_detections'] ):
-        print( "%3.1f%%\t" % output_dict['detection_scores_' + str(i)] 
-               + labels[ int(output_dict['detection_classes_' + str(i)]) ]
-               + ": Top Left: " + str( output_dict['detection_boxes_' + str(i)][0] )
-               + " Bottom Right: " + str( output_dict['detection_boxes_' + str(i)][1] ) )
+        output_str +=  "%3.1f%%\t" % output_dict['detection_scores_' + str(i)] 
+        output_str += labels[ int(output_dict['detection_classes_' + str(i)]) ]
+        output_str += ": Top Left: " + str( output_dict['detection_boxes_' + str(i)][0] )
+        output_str += " Bottom Right: " + str( output_dict['detection_boxes_' + str(i)][1] )
+        output_str += "\n"
 
         # Draw bounding boxes around valid detections 
         (y1, x1) = output_dict.get('detection_boxes_' + str(i))[0]
@@ -126,12 +127,14 @@ def infer_image( graph, img, frame ):
         frame = visualize_output.draw_bounding_box( 
                        y1, x1, y2, x2, 
                        frame,
-                       thickness=4,
+                       thickness=2,
                        fontsize=20,
-                       outlineColor=(255, 255, 0),
-                       textColor=(255, 255, 0),
+                       outlineColor=(0, 255, 0),
+                       textColor=(0, 255, 0),
                        display_str=display_str )
-    print( '\n' )
+    output_str  += "==============================================================\n"
+
+    print( output_str )
 
     return frame;
 
@@ -162,13 +165,16 @@ def main():
             img = pre_process_image( frame )
             output_frame = infer_image( graph, img, frame )
             cv2.imwrite(ARGS.output,output_frame)
+            while( True ):
+              if( cv2.waitKey( 100 ) & 0xFF == ord( 'q' ) ):
+                  break
+
         elif input[0] == "WebCam":
             camera = cv2.VideoCapture(int(input[1]))
             camera.set( cv2.CAP_PROP_FRAME_WIDTH, 620 )
             camera.set( cv2.CAP_PROP_FRAME_HEIGHT, 480 )
             fourcc = cv2.VideoWriter_fourcc(*'XVID')
             out = cv2.VideoWriter('output.mp4', 0x00000021, 15.0, (1280,360))
-            print(ARGS.output)
             while( True ):
                 ret, frame = camera.read()
                 if ret==True:
