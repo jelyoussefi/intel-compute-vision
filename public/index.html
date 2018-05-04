@@ -63,8 +63,8 @@
         <div flex="70"  id = "row2" layout = "row"   class = "row"   layout-align="space-around start">
             <div flex="15" layout = "column" class = "column leftContol round box" >
                
-              <div flex id = "AI Chip" class = "settings" ng-controller="settingsController" >
-                <div class = "settingsTitle"> AI Chip </div>
+              <div flex id = "enference-engine" class = "settings" ng-controller="settingsController" >
+                <div class = "settingsTitle"> Enference Engine </div>
                 <md-radio-group ng-model="settings.chip">
                   
                   <div ng-repeat='chip in chips' >
@@ -78,8 +78,8 @@
                 </md-radio-group>
               </div>
               
-              <div flex id = "CNN" class = "settings" ng-controller="settingsController" >
-                <div class = "settingsTitle">CNN</div>
+              <div flex id = "trained-models" class = "settings" ng-controller="settingsController" >
+                <div class = "settingsTitle">Trained Models</div>
                 <md-radio-group ng-model="settings.cnn">
                   
                   <div ng-repeat='cnn in cnns' class="rowx">
@@ -119,7 +119,7 @@
             <div flex="15"  layout = "column"  class = "rightContol round box"  >
                
                <div flex id = "source" class = "settings" ng-controller="settingsController" >
-                <div class = "settingsTitle"> Source </div>
+                <div class = "settingsTitle">Source </div>
                 <md-radio-group ng-model="settings.source">
                   
                   <div ng-repeat='source in sources' >
@@ -134,7 +134,7 @@
                </div>
 
                <div flex id = "inputType" class = "settings" ng-controller="settingsController" >
-                <div class = "settingsTitle"> Input Type </div>
+                <div class = "settingsTitle">Media Type </div>
                 <md-radio-group ng-model="settings.inputType" >
                   
                   <div ng-repeat='inputType in inputTypes' class="rowx">

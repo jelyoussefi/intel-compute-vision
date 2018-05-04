@@ -100,11 +100,11 @@ angular.module('intelComputeVisionApp').controller('settingsController', ['$scop
 			enabled: true
 		},
 		{
-			name: 'Chips',
+			name: 'Enference Engine',
 			enabled: false
 		},
 		{
-			name: 'CNNs',
+			name: 'Trained Models',
 			enabled: true
 		} 
 	];

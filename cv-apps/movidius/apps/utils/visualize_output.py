@@ -12,6 +12,8 @@ import numpy
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 import fontconfig
 
+fonts = fontconfig.query(family='FreeSerif', lang='en')
+
 def draw_bounding_box( y1, x1, y2, x2, 
                        img, 
                        thickness=4, 
@@ -34,8 +36,8 @@ def draw_bounding_box( y1, x1, y2, x2,
     draw = ImageDraw.Draw( img )
 
     for x in range( 0, thickness ):
-            draw.rectangle( [(x1-x, y1-x), (x2-x, y2-x)], outline=outlineColor )
-    fonts = fontconfig.query(family='FreeSerif', lang='en')
+      draw.rectangle( [(x1-x, y1-x), (x2-x, y2-x)], outline=outlineColor )
+
     for i in range(1, len(fonts)):
       if fonts[i].fontformat == 'TrueType':
         for j in range(1,len(fonts[i].style)):

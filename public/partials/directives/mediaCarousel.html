@@ -23,5 +23,29 @@
 
 
         </ui-carousel>
+
+         <ui-carousel   ng-if="settings.inputType == 'Video'" style="margin: 0 auto;" 
+
+            slides="slides"
+            slides-to-show="1"
+            slides-to-scroll="1"
+            initial-slide="0"
+            autoplay="settings.autoScrollEnabled"
+            autoplay-speed="settings.autoplaySpeed"
+            on-init="onCarouselInit()"
+            on-before-change="onBeforeChange(currentSlide)"
+            on-after-change="onAfterChange(currentSlide)"
+            fade="false"
+            infinite="true"
+            dots="true" >
+
+            <carousel-item  >
+
+                <video  ng-src="{{ item.hasOutputFile ? item.outputFile : item.src }}" resize  ratio="56.25"  controls autoplay allowfullscreen="false" >
+
+            </carousel-item>
+
+
+        </ui-carousel>
   
   </div>

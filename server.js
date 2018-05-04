@@ -17,12 +17,11 @@ var routes = require('./routes/index');
 var usbDetect = require('usb-detection');
 var drivelist = require('drivelist');
 var ml = require('./lib/handlers');
-var video    = express();
 
 var sockets = [];
 var currentCmdProcId = -1;
 var imageOutputFile = "image_output.png";
-var videoOutputFile = "video_output.png";
+var videoOutputFile = "video_output.mp4";
 
 var settings = {
     input: {
@@ -49,10 +48,8 @@ app.use(express.static('/media/jelyouss/boot/'));
 
 app.use('/', routes);
 
-app.use('/video.mp4', video);
-
 /// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(req, res, nevideoOutputFilext) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -191,50 +188,6 @@ function setOutputFile(settings) {
     }
 }
 
-//-----------------------------------------------------------------------------------------------------
-//  Video
-//-----------------------------------------------------------------------------------------------------
-
-video.get('/', function (req, res) {
-    res.set({
-      'Content-Type': 'video/mp4',
-      'Transfer-Encoding': 'chunked'
-    });
-    
-    if (fs.existsSync("/dev/video0")) {
-        console.log("started")
-        var ffmpeg = spawn("ffmpeg", [
-                "-v", "verbose",
-                "-f", "video4linux2",
-                "-s", "352x288",
-                "-re",
-                "-r", "15",
-                "-i", "/dev/video0",
-                "-preset", "veryfast",
-                "-tune", "zerolatency",
-                "-an",
-                "-vcodec", "libx264",
-                "-f", "mp4",
-                "-movflags", "frag_keyframe+empty_moov",     
-                "-fflags", "+genpts+igndts+nobuffer+fastseek",
-                "-frag_duration","1000",
-                    "-"
-                ]);
-
-        res.on("close", function () {
-            ffmpeg.kill('SIGKILL');
-        });
-
-        res.on("disconnected", function () {
-            ffmpeg.kill();
-        });
-
-        ffmpeg.stderr.pipe(process.stderr);
-        ffmpeg.stdout.on('data', function(chunk) {
-            res.write(chunk);
-        });
-    }
-});
 
 function isProcessRunning(pid) {
     try {

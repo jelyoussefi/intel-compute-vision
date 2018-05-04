@@ -14,11 +14,14 @@ import sys
 import numpy
 import ntpath
 import argparse
-
+import socket
 import mvnc.mvncapi as mvnc
+
+import sys
 
 from utils import visualize_output
 from utils import deserialize_output
+from utils import video_recorder as vr
 
 # Detection threshold: Minimum confidance to tag as valid detection
 CONFIDANCE_THRESHOLD = 0.60 # 60% confidant
@@ -29,8 +32,11 @@ ARGS                 = None
 # OpenCV object for video capture
 camera               = None
 
-# Frame Dimension
-frameDim = (400,225)
+FRAME_WIDTH = 400
+FRAME_HEIGHT = 225
+
+HOST = "127.0.0.1"
+PORT = 9000
 
 # ---- Step 1: Open the enumerated device and get a handle to it -------------
 
@@ -92,15 +98,11 @@ def infer_image( graph, img, frame ):
     inference_time = graph.GetGraphOption( mvnc.GraphOption.TIME_TAKEN )
 
     # Deserialize the output into a python dictionary
-    output_dict = deserialize_output.ssd( 
-                      output, 
-                      CONFIDANCE_THRESHOLD, 
-                      frame.shape )
+    output_dict = deserialize_output.ssd( output, CONFIDANCE_THRESHOLD, frame.shape )
 
     # Print the results (each image/frame may have multiple objects)
     output_str  = "\n==============================================================\n"
     output_str += "Execution time: "+ "%.1fms" % ( numpy.sum( inference_time )) + "\n"
-
     for i in range( 0, output_dict['num_detections'] ):
         output_str +=  "%3.1f%%\t" % output_dict['detection_scores_' + str(i)] 
         output_str += labels[ int(output_dict['detection_classes_' + str(i)]) ]
@@ -123,7 +125,7 @@ def infer_image( graph, img, frame ):
                 + ": "
                 + str( output_dict.get('detection_scores_' + str(i) ) )
                 + "%" )
-
+       
         frame = visualize_output.draw_bounding_box( 
                        y1, x1, y2, x2, 
                        frame,
@@ -132,6 +134,7 @@ def infer_image( graph, img, frame ):
                        outlineColor=(0, 255, 0),
                        textColor=(0, 255, 0),
                        display_str=display_str )
+
     output_str  += "==============================================================\n"
 
     print( output_str )
@@ -161,7 +164,7 @@ def main():
     if len(input) == 2:
         if input[0] == "Image":
             frame = cv2.imread(input[1])
-            frame = cv2.resize(frame,frameDim)
+            frame = cv2.resize(frame,(FRAME_WIDTH,FRAME_HEIGHT))
             img = pre_process_image( frame )
             output_frame = infer_image( graph, img, frame )
             cv2.imwrite(ARGS.output,output_frame)
@@ -169,18 +172,25 @@ def main():
               if( cv2.waitKey( 100 ) & 0xFF == ord( 'q' ) ):
                   break
 
-        elif input[0] == "WebCam":
-            camera = cv2.VideoCapture(int(input[1]))
-            camera.set( cv2.CAP_PROP_FRAME_WIDTH, 620 )
-            camera.set( cv2.CAP_PROP_FRAME_HEIGHT, 480 )
-            fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            out = cv2.VideoWriter('output.mp4', 0x00000021, 15.0, (1280,360))
+        elif input[0] == "Video":
+            camera = cv2.VideoCapture(input[1])
+            camera.set( cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH )
+            camera.set( cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT )
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sock.bind(('', PORT))
+            sock.listen(1)
+            vr_inputFile = "tcp://"+HOST+":"+str(PORT)
+            vr.record(vr_inputFile, "bgr24", FRAME_WIDTH, FRAME_HEIGHT, ARGS.output)
+            client, address = sock.accept()
+            print ("{} connected".format( address ))
             while( True ):
                 ret, frame = camera.read()
                 if ret==True:
+                    frame = cv2.resize(frame,(FRAME_WIDTH,FRAME_HEIGHT))
                     img = pre_process_image( frame )
                     output_frame = infer_image( graph, img, frame )
-                    out.write(output_frame)
+                    client.send(output_frame)
     
     close_ncs_device( device, graph )
 

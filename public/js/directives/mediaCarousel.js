@@ -14,6 +14,7 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
         scope.$watch('settings.action', function(newVal, oldVal) {
           scope.slides.forEach(function(slide) {
             slide.outputFile = null;
+            slide.outputfilePath = null;
             slide.hasOutputFile = false;
           })
         }, true)
@@ -23,13 +24,20 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
           scope.slides.forEach(function(slide) {
             slide.src = slide.path;
             slide.outputfile = null;
+            slide.outputfilePath = null;
             slide.hasOutputFile = false;
           })
         })
         
         socket.on('outputFile', function(outputFile) {
-          if ( scope.currentIndex >= 0 && scope.currentIndex < scope.slides.length ) {
-            scope.slides[scope.currentIndex].outputFile =  outputFile+'?_ts='+new Date().getTime();;
+          if ( outputFile && scope.currentIndex >= 0 && scope.currentIndex < scope.slides.length ) {
+            if ( outputFile != scope.slides[scope.currentIndex].outputFilePath ) {
+              setTimeout(function() {
+                console.log("=========1====Out "+outputFile)
+                scope.slides[scope.currentIndex].outputFile =  outputFile+'?_ts='+new Date().getTime();
+                scope.slides[scope.currentIndex].outputFilePath = outputFile;
+              }, 2000)
+            }
           }
          
         })
@@ -42,6 +50,7 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
         }
 
         scope.onAfterChange = function(currentSlide) {
+          console.log("onAfterChange "+scope.slides[scope.currentIndex].outputFile)
           if ( scope.slides[currentSlide] ) {
             scope.settings.file = scope.slides[currentSlide].dir + "/" + scope.slides[currentSlide].path;
             scope.currentIndex = currentSlide;
@@ -52,6 +61,7 @@ intelComputeVisionApp.directive('mediaCarousel', function(settings, socket){
               }
               else {
                 if ( scope.slides[scope.currentIndex].outputFile ) {
+                  console.log("Index "+currentSlide)
                   scope.slides[i].hasOutputFile = true;
                 }
               }
