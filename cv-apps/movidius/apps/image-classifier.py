@@ -19,7 +19,6 @@ import sys
 import re
 from os import system
 
-
 # Number of top prodictions to print
 NUM_PREDICTIONS      = 4
 
@@ -98,7 +97,7 @@ def infer_image( graph, img ):
     output_str += "--------------------------------------------------------------\n"
     for i in range( 0, NUM_PREDICTIONS ):
         output_str +=  "%3.1f%%\t" % (100.0 * output[ order[i] ] ) + labels[ order[i] ] + "\n"
-    output_str += "==============================================================";
+    output_str += "=================================x=============================";
 
     print(output_str)
 
@@ -108,6 +107,7 @@ def infer_image( graph, img ):
 def close_ncs_device( device, graph ):
     graph.DeallocateGraph()
     device.CloseDevice()
+    
 
 # ---- Main function (entry point for this script ) --------------------------
 

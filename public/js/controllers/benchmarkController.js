@@ -34,7 +34,7 @@ angular.module('intelComputeVisionApp').controller('benchmarkController',  ['$sc
 		$scope.settings.benchmarkInProgress = false;
 		$scope.currentIndex=-1;
 
-		if ( benchmark == 'CNNs') {
+		if ( benchmark == 'Trained Models') {
 			$scope.enabledCNNs = $scope.settings.enabledCNNs();
 			if ( $scope.enabledCNNs.length > 0 ) {
 				$scope.settings.benchmarkInProgress = true;

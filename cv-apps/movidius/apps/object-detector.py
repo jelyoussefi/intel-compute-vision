@@ -36,7 +36,7 @@ FRAME_WIDTH = 400
 FRAME_HEIGHT = 225
 
 HOST = "127.0.0.1"
-PORT = 9000
+PORT = 7000
 
 # ---- Step 1: Open the enumerated device and get a handle to it -------------
 
@@ -168,10 +168,6 @@ def main():
             img = pre_process_image( frame )
             output_frame = infer_image( graph, img, frame )
             cv2.imwrite(ARGS.output,output_frame)
-            while( True ):
-              if( cv2.waitKey( 100 ) & 0xFF == ord( 'q' ) ):
-                  break
-
         elif input[0] == "Video":
             camera = cv2.VideoCapture(input[1])
             camera.set( cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH )
@@ -179,9 +175,7 @@ def main():
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind(('', PORT))
-            sock.listen(1)
-            vr_inputFile = "tcp://"+HOST+":"+str(PORT)
-            vr.record(vr_inputFile, "bgr24", FRAME_WIDTH, FRAME_HEIGHT, ARGS.output)
+            sock.listen(10)
             client, address = sock.accept()
             print ("{} connected".format( address ))
             while( True ):

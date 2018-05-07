@@ -17,6 +17,8 @@ var routes = require('./routes/index');
 var usbDetect = require('usb-detection');
 var drivelist = require('drivelist');
 var ml = require('./lib/handlers');
+var vs= require('./lib/video_streamer');
+var video    = express();
 
 var sockets = [];
 var currentCmdProcId = -1;
@@ -29,6 +31,8 @@ var settings = {
         type: '',
     }
 };
+
+
 
 
 var publicPath = path.join(__dirname, 'public')
@@ -48,24 +52,9 @@ app.use(express.static('/media/jelyouss/boot/'));
 
 app.use('/', routes);
 
-/// catch 404 and forward to error handler
-app.use(function(req, res, nevideoOutputFilext) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
+//-----------------------------------------------------------------------------------------------------
+//  Video
+//-----------------------------------------------------------------------------------------------------
 
 // production error handler
 // no stacktraces leaked to user
@@ -157,12 +146,14 @@ function sendInputFiles() {
                         var file = new Object();
                         file.dir = mountPoint;
                         file.path = tmpFiles[i].substring(mountPoint.length+1);
+
                         files.push(file)
                     }
                 }
             })
-
+            
             sockets.forEach(function(socket) {
+               
                 socket.emit('setInputFiles', JSON.stringify(files));
             })
         }
@@ -185,8 +176,13 @@ function setOutputFile(settings) {
     }
     else if ( settings.inputType == "Video") {
         settings.outputFile = settings.outputFilePath + videoOutputFile;
+
     }
 }
+
+//-----------------------------------------------------------------------------------------------------
+//  Video
+//-----------------------------------------------------------------------------------------------------
 
 
 function isProcessRunning(pid) {
@@ -226,7 +222,6 @@ io.sockets.on('connection', function(socket) {
             process.kill(-currentCmdProcId);
             currentCmdProcId = -1;
         }
-
            
         socket.emit('predictions', [])
         if (fs.existsSync(payload.outputFile)) {
@@ -239,7 +234,6 @@ io.sockets.on('connection', function(socket) {
             if ( !err ) {
                 if( result.procId ) {
                     currentCmdProcId = parseInt(result.procId);
-                    console.log(currentCmdProcId)
                 }
                 if ( result.predictions ) {
                     socket.emit('predictions', result.predictions, result.execTime);
